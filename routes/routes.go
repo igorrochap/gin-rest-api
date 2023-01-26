@@ -13,5 +13,7 @@ func HandleRequests() {
 	server.GET("/students/:id", controllers.GetStudentById)
 	server.DELETE("/students/:id", controllers.DeleteStudent)
 	server.PUT("/students/:id", controllers.UpdateStudent)
+	server.GET("/students/cpf/:cpf", controllers.GetStudentByCPF)
+
 	server.Run(":8000")
 }

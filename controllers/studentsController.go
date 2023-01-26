@@ -66,3 +66,16 @@ func UpdateStudent(ctx *gin.Context) {
 	database.DB.Model(&student).UpdateColumns(student)
 	ctx.JSON(http.StatusOK, student)
 }
+
+func GetStudentByCPF(ctx *gin.Context) {
+	var student models.Student
+	cpf := ctx.Param("cpf")
+	database.DB.Where(&models.Student{CPF: cpf}).First(&student)
+	if student.ID == 0 {
+		ctx.JSON(http.StatusNotFound, gin.H{
+			"message": "Student not found",
+		})
+		return
+	}
+	ctx.JSON(http.StatusOK, student)
+}
