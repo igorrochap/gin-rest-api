@@ -45,3 +45,24 @@ func GetStudentById(ctx *gin.Context) {
 	}
 	ctx.JSON(http.StatusOK, student)
 }
+
+func DeleteStudent(ctx *gin.Context) {
+	var student models.Student
+	id := ctx.Params.ByName("id")
+	database.DB.Delete(&student, id)
+	ctx.JSON(http.StatusNoContent, "")
+}
+
+func UpdateStudent(ctx *gin.Context) {
+	var student models.Student
+	id := ctx.Params.ByName("id")
+	database.DB.First(&student, id)
+	if err := ctx.ShouldBindJSON(&student); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+	database.DB.Model(&student).UpdateColumns(student)
+	ctx.JSON(http.StatusOK, student)
+}
